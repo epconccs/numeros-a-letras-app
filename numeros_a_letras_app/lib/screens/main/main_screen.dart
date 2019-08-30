@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                       'Letras',
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 30,
+                          fontSize: 30,  
                           fontWeight: FontWeight.w500,
                           color: Color.fromARGB(255, 243, 123, 125)),
                     ),
@@ -88,6 +88,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     AssetImage assetImage = AssetImage('assets/img/logo-nal-nuevo.png');
     Image image = Image(image: assetImage);
-    return Container(child: image,);
+    return Container(child: image,height: 200,width: 200,);
   }
   }
