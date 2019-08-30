@@ -33,14 +33,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('lib/assets/img/logo-nal-nuevo.png',
-                              package: 'numeros_a_letras_app'),
-                        ),
-                      ),
-                    ),
+                    ImageNalLogo(),
                     TextField(
                         style: TextStyle(
                             fontFamily: 'Poppins',
@@ -90,3 +83,11 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 }
+ class ImageNalLogo extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    AssetImage assetImage = AssetImage('assets/img/logo-nal-nuevo.png');
+    Image image = Image(image: assetImage);
+    return Container(child: image,);
+  }
+  }
