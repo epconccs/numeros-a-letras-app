@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:numeros_a_letras_app/utils/image_widget.dart';
+import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -6,15 +8,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _counter = 0;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,47 +25,18 @@ class _MainScreenState extends State<MainScreen> {
           child: Stack(
             alignment: Alignment.topCenter,
             children: <Widget>[
-              Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        CustomPaint(
-                        painter: ShapesPainter(),
-                        child: Container(
-                          height: 700,
-                          child: ImageView('assets/img/about.png', 40, 40),
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.fromLTRB(0, 60, 10, 0),
-                        ),
-                      ),
-                      ],
-                    ),
+              getAboutButton(),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    ImageView('assets/img/logo-nal-nuevo.png',200,200),
-                    TextField(
-                      textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            color: Color.fromARGB(255,71,144,181),
-                            fontWeight: FontWeight.w400),
-                        decoration: InputDecoration(
-                          hintText: 'Número' ,
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color.fromARGB(90,75,212,106),
-                          style: BorderStyle.solid)),
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(90,75,212,106) 
-                            )
-                            )
-                            ),
+                    ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
+                    getTextfieldAndLabel(),
                     Text(
                       'Letras',
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 30,
+                          fontSize: 18,
                           fontWeight: FontWeight.w500,
                           color: Color.fromARGB(255, 243, 123, 125)),
                     ),
@@ -86,6 +52,49 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
+  //Método para obtener las vistas centrales (Textfield y Label)
+  getTextfieldAndLabel(){
+    return SizedBox(
+                      width: widthScreen * 0.8,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 71, 144, 181),
+                            fontWeight: FontWeight.w400),
+                        decoration: InputDecoration(
+                            hintText: 'Número',
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(90, 75, 212, 106),
+                                    style: BorderStyle.solid)),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(90, 75, 212, 106),
+                                    style: BorderStyle.solid)),
+                            hintStyle: TextStyle(
+                                color: Color.fromARGB(90, 75, 212, 106)))),
+                    );
+  }
+//Método para obtener el botón ACERCA DE
+  getAboutButton(){
+    return Stack(
+                alignment: Alignment.topRight,
+                children: <Widget>[
+                  CustomPaint(
+                    painter: ShapesPainter(),
+                    child: Container(
+                      height: 700,
+                      child: ImageView('assets/img/about.png', 40, 40),
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
+                    ),
+                  ),
+                ],
+              );
+  }
+//Método para obtener el botón de "COPIAR"
   getRoundedButton() {
     final buttonWidth = widthScreen * 0.7;
     final buttonHeight = heightScreen * 0.07;
@@ -108,41 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                   fontWeight: FontWeight.w500)),
         ));
   }
+
 }
 
-class ImageView extends StatelessWidget {
-  String _path ;
-  double _height;
-  double _width;
-  Image image;
-  ImageView( this._path,this._height,this._width);
-  
 
-  @override
-  Widget build(BuildContext context) {
-    AssetImage assetImage = AssetImage(_path);
-    Image image = Image(image: assetImage);
-    return Container(
-      child: image,
-      height: _height,
-      width: _height,
-    );
-  }
-}
-
-class ShapesPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint();
-    // set the color property of the paint
-    paint.color = Color.fromARGB(244, 157, 232, 174);
-    // center of the canvas is (x,y) => (width/2, height/2)
-    var center = Offset(size.width / 1.03, size.height / 15);
-
-    // draw the circle on centre of canvas having radius 75.0
-    canvas.drawCircle(center, 75.0, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
