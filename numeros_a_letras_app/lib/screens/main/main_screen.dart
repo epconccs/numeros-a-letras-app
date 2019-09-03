@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:numeros_a_letras_app/data/number_repository.dart';
+import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
+import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
+import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
@@ -8,6 +12,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final NalBloc nalBloc = NalBloc(NumberRepository());
+  final numberTextController = TextEditingController();
   double widthScreen = 0.0;
   double heightScreen = 0.0;
 
@@ -32,13 +38,19 @@ class _MainScreenState extends State<MainScreen> {
                   children: <Widget>[
                     ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
                     getTextfieldAndLabel(),
-                    Text(
-                      'Letras',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 243, 123, 125)),
+                    StreamBuilder<NalState>(
+                      initialData: NalDataState("Letras"),
+                      stream: nalBloc.number,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return Text(
+                          (snapshot.data as NalDataState).number,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromARGB(255, 243, 123, 125)),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -53,47 +65,50 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   //Método para obtener las vistas centrales (Textfield y Label)
-  getTextfieldAndLabel(){
+  getTextfieldAndLabel() {
     return SizedBox(
-                      width: widthScreen * 0.8,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            color: Color.fromARGB(255, 71, 144, 181),
-                            fontWeight: FontWeight.w400),
-                        decoration: InputDecoration(
-                            hintText: 'Número',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(90, 75, 212, 106),
-                                    style: BorderStyle.solid)),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(90, 75, 212, 106),
-                                    style: BorderStyle.solid)),
-                            hintStyle: TextStyle(
-                                color: Color.fromARGB(90, 75, 212, 106)))),
-                    );
+      width: widthScreen * 0.8,
+      child: TextField(
+          onChanged: (String numberText) =>
+              nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              color: Color.fromARGB(255, 71, 144, 181),
+              fontWeight: FontWeight.w400),
+          decoration: InputDecoration(
+              hintText: 'Número',
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(90, 75, 212, 106),
+                      style: BorderStyle.solid)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(90, 75, 212, 106),
+                      style: BorderStyle.solid)),
+              hintStyle: TextStyle(color: Color.fromARGB(90, 75, 212, 106)))),
+    );
   }
+
 //Método para obtener el botón ACERCA DE
-  getAboutButton(){
+  getAboutButton() {
     return Stack(
-                alignment: Alignment.topRight,
-                children: <Widget>[
-                  CustomPaint(
-                    painter: ShapesPainter(),
-                    child: Container(
-                      height: 700,
-                      child: ImageView('assets/img/about.png', 40, 40),
-                      alignment: Alignment.topRight,
-                      padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
-                    ),
-                  ),
-                ],
-              );
+      alignment: Alignment.topRight,
+      children: <Widget>[
+        CustomPaint(
+          painter: ShapesPainter(),
+          child: Container(
+            height: 700,
+            child: ImageView('assets/img/about.png', 40, 40),
+            alignment: Alignment.topRight,
+            padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
+          ),
+        ),
+      ],
+    );
   }
+
 //Método para obtener el botón de "COPIAR"
   getRoundedButton() {
     final buttonWidth = widthScreen * 0.7;
@@ -117,7 +132,4 @@ class _MainScreenState extends State<MainScreen> {
                   fontWeight: FontWeight.w500)),
         ));
   }
-
 }
-
-
