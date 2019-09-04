@@ -34,9 +34,10 @@ class _MainScreenState extends State<MainScreen> {
                     getTextfieldAndLabel(),
                     Text(
                       'Letras',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 18,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Color.fromARGB(255, 243, 123, 125)),
                     ),
