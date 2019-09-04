@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:numeros_a_letras_app/utils/image_widget.dart';
+import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -6,15 +8,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _counter = 0;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +23,21 @@ class _MainScreenState extends State<MainScreen> {
         body: Container(
           margin: EdgeInsets.only(bottom: buttonMarginBottom),
           child: Stack(
+            alignment: Alignment.topCenter,
             children: <Widget>[
+              getAboutButton(),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    ImageNalLogo(),
-                    TextField(
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400),
-                        decoration: InputDecoration()),
+                    ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
+                    getTextfieldAndLabel(),
                     Text(
                       'Letras',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 30,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Color.fromARGB(255, 243, 123, 125)),
                     ),
@@ -60,6 +53,49 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
+  //Método para obtener las vistas centrales (Textfield y Label)
+  getTextfieldAndLabel(){
+    return SizedBox(
+                      width: widthScreen * 0.8,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 71, 144, 181),
+                            fontWeight: FontWeight.w400),
+                        decoration: InputDecoration(
+                            hintText: 'Número',
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(90, 75, 212, 106),
+                                    style: BorderStyle.solid)),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(90, 75, 212, 106),
+                                    style: BorderStyle.solid)),
+                            hintStyle: TextStyle(
+                                color: Color.fromARGB(90, 75, 212, 106)))),
+                    );
+  }
+//Método para obtener el botón ACERCA DE
+  getAboutButton(){
+    return Stack(
+                alignment: Alignment.topRight,
+                children: <Widget>[
+                  CustomPaint(
+                    painter: ShapesPainter(),
+                    child: Container(
+                      height: 700,
+                      child: ImageView('assets/img/about.png', 40, 40),
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
+                    ),
+                  ),
+                ],
+              );
+  }
+//Método para obtener el botón de "COPIAR"
   getRoundedButton() {
     final buttonWidth = widthScreen * 0.7;
     final buttonHeight = heightScreen * 0.07;
@@ -82,12 +118,7 @@ class _MainScreenState extends State<MainScreen> {
                   fontWeight: FontWeight.w500)),
         ));
   }
+
 }
- class ImageNalLogo extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    AssetImage assetImage = AssetImage('assets/img/logo-nal-nuevo.png');
-    Image image = Image(image: assetImage);
-    return Container(child: image,);
-  }
-  }
+
+
