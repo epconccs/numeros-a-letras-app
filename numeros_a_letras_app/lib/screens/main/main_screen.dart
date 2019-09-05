@@ -44,9 +44,10 @@ class _MainScreenState extends State<MainScreen> {
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         return Text(
                           (snapshot.data as NalDataState).number,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontFamily: 'Poppins',
-                              fontSize: 18,
+                              fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: Color.fromARGB(255, 243, 123, 125)),
                         );
