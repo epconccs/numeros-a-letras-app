@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
@@ -39,20 +40,9 @@ class _MainScreenState extends State<MainScreen> {
                     ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
                     getTextfieldAndLabel(),
                     StreamBuilder<NalState>(
-                      initialData: NalDataState("Letras"),
-                      stream: nalBloc.number,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        return Text(
-                          (snapshot.data as NalDataState).number,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 243, 123, 125)),
-                        );
-                      },
-                    ),
+                        initialData: NalDataState("Letras"),
+                        stream: nalBloc.number,
+                        builder: getLettersLabel()),
                   ],
                 ),
               ),
@@ -70,6 +60,10 @@ class _MainScreenState extends State<MainScreen> {
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly
+          ],
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
@@ -132,5 +126,45 @@ class _MainScreenState extends State<MainScreen> {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500)),
         ));
+  }
+
+  //Método para obtener la label de Letras según el contenido del textfield
+  getLettersLabel() {
+    return (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(child: getRequiredWidget(snapshot.data));
+    };
+  }
+
+  getRequiredWidget(NalState snapshotData) {
+    switch (snapshotData.runtimeType) {
+      case NalLoadingState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 243, 123, 125))));
+        break;
+      case NalEmptyDataState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text((snapshotData as NalEmptyDataState).letters,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 243, 123, 125))));
+      case NalDataState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text((snapshotData as NalDataState).number,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 243, 123, 125))));
+      default:
+    }
   }
 }

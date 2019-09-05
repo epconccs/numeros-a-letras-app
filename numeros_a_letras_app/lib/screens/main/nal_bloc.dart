@@ -21,12 +21,16 @@ class NalBloc {
   }
 
   void _mapEventToState(NalEvent event) {
+    _inputNumber.add(NalLoadingState());
     if (event is NewNumberEvent) {
       if (event.numberT.isNotEmpty && event.numberT != null) {
         var num = double.parse(event.numberT);
         _numberRepository.getNumber(num).then((number) {
           _inputNumber.add(NalState.numberData(number.letters));
         });
+      }
+      else{
+        _inputNumber.add(NalState.emptyData());
       }
     }
   }
