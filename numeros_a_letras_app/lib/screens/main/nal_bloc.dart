@@ -34,4 +34,11 @@ class NalBloc {
       }
     }
   }
+
+  void dispose(){
+    _nalEventController.close();
+    _nalStateController.close();
+  }
+ 
+ 
 }

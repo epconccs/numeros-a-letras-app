@@ -15,6 +15,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final NalBloc nalBloc = NalBloc(NumberRepository());
   final numberTextController = TextEditingController();
+  bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
 
@@ -27,7 +28,14 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
-        body: Container(
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            isTexfieldFocused = false;
+            
+          }, 
+          child: Container(
           margin: EdgeInsets.only(bottom: buttonMarginBottom),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -52,14 +60,23 @@ class _MainScreenState extends State<MainScreen> {
                       child: getRoundedButton())),
             ],
           ),
-        ));
+        )));
   }
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
+    var _focusNode = new FocusNode();
+    _focusNode.addListener(() {
+      _focusNode.hasFocus
+          ? isTexfieldFocused = true
+          : isTexfieldFocused = false;
+    });
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
+          textInputAction: TextInputAction.done,
+          onEditingComplete: () => isTexfieldFocused = false,
+          focusNode: _focusNode,
           keyboardType: TextInputType.number,
           inputFormatters: <TextInputFormatter>[
             WhitelistingTextInputFormatter.digitsOnly
@@ -88,20 +105,22 @@ class _MainScreenState extends State<MainScreen> {
 
 //Método para obtener el botón ACERCA DE
   getAboutButton() {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        CustomPaint(
-          painter: ShapesPainter(),
-          child: Container(
-            height: 700,
-            child: ImageView('assets/img/about.png', 40, 40),
-            alignment: Alignment.topRight,
-            padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
-          ),
-        ),
-      ],
-    );
+    return Offstage(
+        offstage: isTexfieldFocused,
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: <Widget>[
+            CustomPaint(
+              painter: ShapesPainter(),
+              child: Container(
+                height: 700,
+                child: ImageView('assets/img/about.png', 40, 40),
+                alignment: Alignment.topRight,
+                padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
+              ),
+            ),
+          ],
+        ));
   }
 
 //Método para obtener el botón de "COPIAR"
@@ -167,4 +186,11 @@ class _MainScreenState extends State<MainScreen> {
       default:
     }
   }
+  @override
+  void dispose() {
+    super.dispose();
+    if(nalBloc != null )
+    nalBloc.dispose();
+  }
+
 }
