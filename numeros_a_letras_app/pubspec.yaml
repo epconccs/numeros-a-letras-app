@@ -45,13 +45,15 @@ flutter:
   assets:
     - assets/img/logo-nal-nuevo.png
     - assets/img/about.png
+    - assets/img/icono-logo-epcon.png
+    - assets/img/logo-github.png
   #  - images/a_dot_ham.jpeg
   fonts:
     - family: Poppins
       fonts:
         - asset: lib/assets/fonts/Poppins-Medium.ttf
           weight: 500
-        - asset: lib/assets/fonts/Poppins-Medium.ttf
+        - asset: lib/assets/fonts/Poppins-Regular.ttf
           weight: 400
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
