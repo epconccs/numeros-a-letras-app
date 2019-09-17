@@ -21,10 +21,10 @@ class _AboutScreenState extends State<AboutScreen> {
     var padding = MediaQuery.of(context).padding;
     var height1 = heightScreen - padding.top - padding.bottom;
 
-    var heightNalLogo = heightScreen * 0.2;
-    var widthNalLogo = widthScreen * 0.2;
-    var heightEpconLogo = heightScreen * 0.12;
-    var widthEpconLogo = widthScreen * 0.12;
+    var heightNalLogo = heightScreen * 0.15;
+    var widthNalLogo = widthScreen * 0.15;
+    var heightEpconLogo = heightScreen * 0.1;
+    var widthEpconLogo = widthScreen * 0.1;
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         body: Container(
@@ -78,7 +78,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(top: padding.top * 2),
+                      margin: EdgeInsets.only(top: padding.top),
                       child: Align(
                         alignment: Alignment.topCenter,
                         child: ImageView('assets/img/icono-logo-epcon.png',
@@ -100,55 +100,30 @@ class _AboutScreenState extends State<AboutScreen> {
                   getGithubButton()
                 ],
               )
-              ,getAboutButton()
+              ,getBackButton()
             ],
           ),
         ));
   }
 
-  //Método para obtener el botón de Contribuir en github
-  /* getGithubButton() {
-    final buttonWidth = widthScreen * 0.7;
-    final buttonHeight = heightScreen * 0.07;
-
-    return SizedBox(
-        width: buttonWidth,
-        height: buttonHeight,
-        child: RaisedButton(
-          
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(50.0),
-              side: BorderSide(color: Color.fromARGB(255, 0, 0, 0))),
-          onPressed: () {},
-          color: Color.fromARGB(255, 0, 0, 0),
-          elevation: 0.0,
-          textColor: Colors.white,
-          child: Text("Contribuye en GitHub",
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400)),
-        ));
-  }*/
-  //Método para obtener el botón ACERCA DE
-  getAboutButton() {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        CustomPaint(
-          painter: ShapesPainter(),
+  
+ 
+  //Método para obtener el botón para ir a pantalla principal
+  getBackButton() {
+    return Positioned(
+        right: widthScreen * 0.7,
+        top: heightScreen * 0.82,
+        child: GestureDetector(
+          onTap: () => Navigator.pop(context),
           child: Container(
-            height: 700,
-            child: ImageView('assets/img/about.png', 40, 40),
-            alignment: Alignment.bottomLeft,
-            padding: EdgeInsets.fromLTRB(50, 0, 0, 10),
+            height: heightScreen*0.95,
+            child: ImageView('assets/img/about-close.png', 200, 200),
+            alignment: Alignment.topRight,
           ),
-        ),
-      ],
-    );
+        ));
   }
 
+//Método para obtener el botón de Contribuir en github
   getGithubButton() {
     final buttonWidth = widthScreen * 0.65;
     final buttonHeight = heightScreen * 0.067;

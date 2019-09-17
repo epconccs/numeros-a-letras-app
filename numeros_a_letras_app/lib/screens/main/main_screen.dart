@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
+import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
@@ -88,20 +89,18 @@ class _MainScreenState extends State<MainScreen> {
 
 //Método para obtener el botón ACERCA DE
   getAboutButton() {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        CustomPaint(
-          painter: ShapesPainter(),
+    return Positioned(
+        left: widthScreen * 0.7,
+        bottom: heightScreen * 0.1,
+        child: GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutScreen()))
+          ,
           child: Container(
-            height: 700,
-            child: ImageView('assets/img/about.png', 40, 40),
+            height: heightScreen*0.95,
+            child: ImageView('assets/img/about-circle.png', 200, 200),
             alignment: Alignment.topRight,
-            padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
           ),
-        ),
-      ],
-    );
+        ));
   }
 
 //Método para obtener el botón de "COPIAR"

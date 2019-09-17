@@ -44,9 +44,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/img/logo-nal-nuevo.png
-    - assets/img/about.png
     - assets/img/icono-logo-epcon.png
     - assets/img/logo-github.png
+    - assets/img/logo-github.png
+    - assets/img/about-circle.png
+    - assets/img/about-close.png
+   
   #  - images/a_dot_ham.jpeg
   fonts:
     - family: Poppins

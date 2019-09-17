@@ -17,7 +17,7 @@ class NalAppState extends State<NalApp>{
     return MaterialApp(
       theme: ThemeData(),
       routes: {
-        '/': (context) => AboutScreen(),
+        '/': (context) => MainScreen(),
         //'/game': (context) => GameScreen()
       },
     );
