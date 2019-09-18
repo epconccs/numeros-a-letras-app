@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatefulWidget {
   @override
@@ -77,37 +78,39 @@ class _AboutScreenState extends State<AboutScreen> {
                           fontWeight: FontWeight.w400),
                     ),
                   ),
-                  Container(
-                      margin: EdgeInsets.only(top: padding.top),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: ImageView('assets/img/icono-logo-epcon.png',
-                            heightEpconLogo, widthEpconLogo),
+                  GestureDetector(
+                      onTap: () => _launchURL(),
+                      child: Container(
+                          margin: EdgeInsets.only(top: padding.top),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: ImageView('assets/img/icono-logo-epcon.png',
+                                heightEpconLogo, widthEpconLogo),
+                          ))),
+                  GestureDetector(
+                      onTap: () => _launchURL(),
+                      child: Container(
+                        margin: EdgeInsets.only(top: padding.top / 2),
+                        width: widthScreen * 0.6,
+                        child: Text(
+                          "www.epcon.com.mx",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 0, 65, 87),
+                              fontFamily: 'Poppins',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400),
+                        ),
                       )),
-                  Container(
-                    margin: EdgeInsets.only(top: padding.top / 2),
-                    width: widthScreen * 0.6,
-                    child: Text(
-                      "www.epcon.com.mx",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 0, 65, 87),
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
                   getGithubButton()
                 ],
-              )
-              ,getBackButton()
+              ),
+              getBackButton()
             ],
           ),
         ));
   }
 
-  
- 
   //Método para obtener el botón para ir a pantalla principal
   getBackButton() {
     return Positioned(
@@ -116,7 +119,7 @@ class _AboutScreenState extends State<AboutScreen> {
         child: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Container(
-            height: heightScreen*0.95,
+            height: heightScreen * 0.95,
             child: ImageView('assets/img/about-close.png', 200, 200),
             alignment: Alignment.topRight,
           ),
@@ -135,7 +138,7 @@ class _AboutScreenState extends State<AboutScreen> {
           height: buttonHeight,
           child: Container(
             child: RaisedButton(
-              onPressed: () => {},
+              onPressed: () => _launchURLGitHub(),
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(50.0),
                   side: BorderSide(color: Color.fromARGB(255, 0, 0, 0))),
@@ -167,4 +170,23 @@ class _AboutScreenState extends State<AboutScreen> {
           ),
         ));
   }
+
+  _launchURL() async {
+    const url = 'https://epcon.com.mx';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchURLGitHub() async {
+    const url = 'https://github.com/epconccs/numeros-a-letras-app';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 }
