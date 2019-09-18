@@ -4,6 +4,7 @@ import 'package:numeros_a_letras_app/data/number_repository.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
+import 'package:numeros_a_letras_app/utils/decimal_formater.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
@@ -77,10 +78,8 @@ class _MainScreenState extends State<MainScreen> {
           textInputAction: TextInputAction.done,
           onEditingComplete: () => isTexfieldFocused = false,
           focusNode: _focusNode,
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            WhitelistingTextInputFormatter.digitsOnly
-          ],
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2, activatedNegativeValues:false)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
