@@ -5,6 +5,7 @@ import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
+import 'package:numeros_a_letras_app/utils/decimal_formater.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
@@ -16,6 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final NalBloc nalBloc = NalBloc(NumberRepository());
   final numberTextController = TextEditingController();
+  bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
 
@@ -28,7 +30,14 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
-        body: Container(
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            isTexfieldFocused = false;
+            
+          }, 
+          child: Container(
           margin: EdgeInsets.only(bottom: buttonMarginBottom),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -53,18 +62,25 @@ class _MainScreenState extends State<MainScreen> {
                       child: getRoundedButton())),
             ],
           ),
-        ));
+        )));
   }
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
+    var _focusNode = new FocusNode();
+    _focusNode.addListener(() {
+      _focusNode.hasFocus
+          ? isTexfieldFocused = true
+          : isTexfieldFocused = false;
+    });
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            WhitelistingTextInputFormatter.digitsOnly
-          ],
+          textInputAction: TextInputAction.done,
+          onEditingComplete: () => isTexfieldFocused = false,
+          focusNode: _focusNode,
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2, activatedNegativeValues:false)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
@@ -166,4 +182,11 @@ class _MainScreenState extends State<MainScreen> {
       default:
     }
   }
+  @override
+  void dispose() {
+    super.dispose();
+    if(nalBloc != null )
+    nalBloc.dispose();
+  }
+
 }
