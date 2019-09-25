@@ -38,7 +38,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       margin: EdgeInsets.only(top: padding.top),
                       child: Align(
                         alignment: Alignment.topCenter,
-                        child: ImageView('assets/img/logo-nal-nuevo.png',
+                        child: ImageView('assets/img/logo-nal-nuevo.webp',
                             heightNalLogo, widthNalLogo),
                       )),
                   Container(
@@ -84,7 +84,7 @@ class _AboutScreenState extends State<AboutScreen> {
                           margin: EdgeInsets.only(top: padding.top),
                           child: Align(
                             alignment: Alignment.topCenter,
-                            child: ImageView('assets/img/icono-logo-epcon.png',
+                            child: ImageView('assets/img/icono-logo-epcon.webp',
                                 heightEpconLogo, widthEpconLogo),
                           ))),
                   GestureDetector(
@@ -120,7 +120,7 @@ class _AboutScreenState extends State<AboutScreen> {
           onTap: () => Navigator.pop(context),
           child: Container(
             height: heightScreen * 0.95,
-            child: ImageView('assets/img/about-close.png', 200, 200),
+            child: ImageView('assets/img/about-close.webp', 200, 200),
             alignment: Alignment.topRight,
           ),
         ));
@@ -147,7 +147,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Flexible(
-                    child: ImageView('assets/img/logo-github.png', 40, 40),
+                    child: ImageView('assets/img/logo-github.webp', 40, 40),
                     flex: 1,
                   ),
                   Flexible(

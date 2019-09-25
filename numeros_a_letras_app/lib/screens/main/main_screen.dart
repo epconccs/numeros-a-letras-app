@@ -47,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
+                    ImageView('assets/img/logo-nal-nuevo.webp', 150, 150),
                     getTextfieldAndLabel(),
                     StreamBuilder<NalState>(
                         initialData: NalDataState("Letras"),
@@ -113,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
           ,
           child: Container(
             height: heightScreen*0.95,
-            child: ImageView('assets/img/about-circle.png', 200, 200),
+            child: ImageView('assets/img/about-circle.webp', 200, 200),
             alignment: Alignment.topRight,
           ),
         ));
