@@ -45,7 +45,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     margin: EdgeInsets.only(top: padding.top),
                     width: widthScreen * 0.5,
                     child: Text(
-                      "NAL es un proyecto diseñado y desarrollado en México por EPCON CSS",
+                      "NAL es un proyecto diseñado y desarrollado en México por EPCON CCS",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Color.fromARGB(255, 96, 95, 95),
