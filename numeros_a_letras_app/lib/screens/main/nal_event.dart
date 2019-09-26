@@ -7,3 +7,7 @@ class NewNumberEvent extends NalEvent {
   }
   
 }
+
+class EmptyDataEvent extends NalEvent{
+  
+}

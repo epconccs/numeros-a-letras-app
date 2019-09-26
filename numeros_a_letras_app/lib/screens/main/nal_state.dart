@@ -8,6 +8,7 @@ class NalState {
 class NalDataState extends NalState {
   NalDataState(this.number);
   final String number;
+  final String letters = "Letras";
 }
 class NalEmptyDataState extends NalState{
   final String letters = "Letras";

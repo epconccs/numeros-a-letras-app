@@ -6,7 +6,7 @@ import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
 import 'nal_event.dart';
 
 class NalBloc {
-  int num = 0;
+ 
   final NumberRepository _numberRepository;
   final _nalStateController = StreamController<NalState>();
 
@@ -19,18 +19,26 @@ class NalBloc {
   NalBloc(this._numberRepository) {
     _nalEventController.stream.listen(_mapEventToState);
   }
-
   void _mapEventToState(NalEvent event) {
     _inputNumber.add(NalLoadingState());
     if (event is NewNumberEvent) {
-      if (event.numberT.isNotEmpty && event.numberT != null) {
-          var num = double.parse(event.numberT);
-          _numberRepository.getNumber(num).then((number) {
-            _inputNumber.add(NalState.numberData(number.letters));
-          });
+      if (event.numberT.isNotEmpty) {
+        var num = double.parse(event.numberT);
+
+        _numberRepository
+            .fromCancelable(
+                Future.delayed(const Duration(milliseconds: 500), () {
+          return _numberRepository.getNumber(num);
+        }))
+            .then((number) {
+          _inputNumber.add(NalState.numberData(number.letters));
+        });
       } else {
         _inputNumber.add(NalState.emptyData());
       }
+    }
+    else if (event is EmptyDataEvent){
+      _inputNumber.add(NalState.emptyData());
     }
   }
 
