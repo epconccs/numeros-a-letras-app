@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
+import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_event.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_state.dart';
+import 'package:numeros_a_letras_app/utils/decimal_formater.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 
@@ -14,6 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final NalBloc nalBloc = NalBloc(NumberRepository());
   final numberTextController = TextEditingController();
+  bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
 
@@ -26,7 +30,14 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
-        body: Container(
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            isTexfieldFocused = false;
+            
+          }, 
+          child: Container(
           margin: EdgeInsets.only(bottom: buttonMarginBottom),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -36,23 +47,12 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    ImageView('assets/img/logo-nal-nuevo.png', 150, 150),
+                    ImageView('assets/img/logo-nal-nuevo.webp', 150, 150),
                     getTextfieldAndLabel(),
                     StreamBuilder<NalState>(
-                      initialData: NalDataState("Letras"),
-                      stream: nalBloc.number,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        return Text(
-                          (snapshot.data as NalDataState).number,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 243, 123, 125)),
-                        );
-                      },
-                    ),
+                        initialData: NalDataState("Letras"),
+                        stream: nalBloc.number,
+                        builder: getLettersLabel()),
                   ],
                 ),
               ),
@@ -62,14 +62,25 @@ class _MainScreenState extends State<MainScreen> {
                       child: getRoundedButton())),
             ],
           ),
-        ));
+        )));
   }
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
+    var _focusNode = new FocusNode();
+    _focusNode.addListener(() {
+      _focusNode.hasFocus
+          ? isTexfieldFocused = true
+          : isTexfieldFocused = false;
+    });
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
+          textInputAction: TextInputAction.done,
+          onEditingComplete: () => isTexfieldFocused = false,
+          focusNode: _focusNode,
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2, activatedNegativeValues:false)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
@@ -94,20 +105,18 @@ class _MainScreenState extends State<MainScreen> {
 
 //Método para obtener el botón ACERCA DE
   getAboutButton() {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        CustomPaint(
-          painter: ShapesPainter(),
+    return Positioned(
+        left: widthScreen * 0.7,
+        bottom: heightScreen * 0.1,
+        child: GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutScreen()))
+          ,
           child: Container(
-            height: 700,
-            child: ImageView('assets/img/about.png', 40, 40),
+            height: heightScreen*0.95,
+            child: ImageView('assets/img/about-circle.webp', 200, 200),
             alignment: Alignment.topRight,
-            padding: EdgeInsets.fromLTRB(0, 50, 10, 0),
           ),
-        ),
-      ],
-    );
+        ));
   }
 
 //Método para obtener el botón de "COPIAR"
@@ -133,4 +142,51 @@ class _MainScreenState extends State<MainScreen> {
                   fontWeight: FontWeight.w500)),
         ));
   }
+
+  //Método para obtener la label de Letras según el contenido del textfield
+  getLettersLabel() {
+    return (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(child: getRequiredWidget(snapshot.data));
+    };
+  }
+
+  getRequiredWidget(NalState snapshotData) {
+    switch (snapshotData.runtimeType) {
+      case NalLoadingState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 243, 123, 125))));
+        break;
+      case NalEmptyDataState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text((snapshotData as NalEmptyDataState).letters,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 243, 123, 125))));
+      case NalDataState:
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text((snapshotData as NalDataState).number,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 243, 123, 125))));
+      default:
+    }
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    if(nalBloc != null )
+    nalBloc.dispose();
+  }
+
 }
