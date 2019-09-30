@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
 import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
@@ -29,7 +30,17 @@ class _MainScreenState extends State<MainScreen> {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
     double buttonMarginBottom = heightScreen * 0.05;
-
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (visible) {
+          isTexfieldFocused = true;
+        } else {
+          FocusScope.of(_focusNode.context).unfocus();
+          isTexfieldFocused = false;
+        }
+        checkFocusTextfieldEvent();
+      },
+    );
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
         body: GestureDetector(
@@ -76,7 +87,6 @@ class _MainScreenState extends State<MainScreen> {
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
-    
     _focusNode.addListener(() {
       _focusNode.hasFocus
           ? isTexfieldFocused = true
