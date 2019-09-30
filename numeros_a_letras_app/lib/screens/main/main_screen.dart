@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
 import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
@@ -21,6 +22,8 @@ class _MainScreenState extends State<MainScreen> {
   bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
+  double heightWidthLogoNal = 150;
+  var _focusNode = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +31,25 @@ class _MainScreenState extends State<MainScreen> {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
     double buttonMarginBottom = heightScreen * 0.05;
-
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (visible) {
+          isTexfieldFocused = true;
+        } else {
+          FocusScope.of(_focusNode.context).unfocus();
+          isTexfieldFocused = false;
+        }
+        checkFocusTextfieldEvent();
+      },
+    );
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
         body: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              FocusScope.of(context).unfocus();
+              FocusScope.of(_focusNode.context).unfocus();
               isTexfieldFocused = false;
+              checkFocusTextfieldEvent();
             },
             child: Container(
               margin: EdgeInsets.only(bottom: buttonMarginBottom),
@@ -47,7 +61,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        ImageView('assets/img/logo-nal-nuevo.webp', 150, 150),
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.bounceInOut,
+                          height: heightWidthLogoNal,
+                          width: heightWidthLogoNal,
+                          child: ImageView('assets/img/logo-nal-nuevo.webp',
+                              heightWidthLogoNal, heightWidthLogoNal),
+                        ),
                         getTextfieldAndLabel(),
                         StreamBuilder<NalState>(
                             initialData: NalDataState("Letras"),
@@ -67,17 +88,18 @@ class _MainScreenState extends State<MainScreen> {
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
-    var _focusNode = new FocusNode();
     _focusNode.addListener(() {
       _focusNode.hasFocus
           ? isTexfieldFocused = true
           : isTexfieldFocused = false;
+      checkFocusTextfieldEvent();
     });
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
           controller: numberTextController,
           textInputAction: TextInputAction.done,
+          autofocus: false,
           onEditingComplete: () => isTexfieldFocused = false,
           focusNode: _focusNode,
           inputFormatters: [
@@ -196,6 +218,18 @@ class _MainScreenState extends State<MainScreen> {
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 243, 123, 125))));
       default:
+    }
+  }
+
+  checkFocusTextfieldEvent() {
+    if (isTexfieldFocused) {
+      setState(() {
+        heightWidthLogoNal = 100;
+      });
+    } else {
+      setState(() {
+        heightWidthLogoNal = 150;
+      });
     }
   }
 
