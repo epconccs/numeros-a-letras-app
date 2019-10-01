@@ -1,3 +1,4 @@
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -18,12 +19,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final NalBloc nalBloc = NalBloc(NumberRepository());
   final numberTextController = TextEditingController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>(); 
 
   bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
   double heightWidthLogoNal = 150;
   var _focusNode = new FocusNode();
+  String textLetters = "";
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
     double buttonMarginBottom = heightScreen * 0.05;
+
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         if (visible) {
@@ -43,6 +47,7 @@ class _MainScreenState extends State<MainScreen> {
       },
     );
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
         body: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -88,6 +93,7 @@ class _MainScreenState extends State<MainScreen> {
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
+    //Se agrega un listener para deteminar si tiene focus la caja de texto o no.
     _focusNode.addListener(() {
       _focusNode.hasFocus
           ? isTexfieldFocused = true
@@ -157,7 +163,20 @@ class _MainScreenState extends State<MainScreen> {
           shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0),
               side: BorderSide(color: Color.fromARGB(244, 157, 232, 174))),
-          onPressed: () {},
+          onPressed: () {
+            if (textLetters != "Letras" && textLetters != "") {
+              ClipboardManager.copyToClipBoard(textLetters)
+                  .then((result) {
+                final snackBar = SnackBar(
+                  duration: Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
+                  content: Text('Texto copiado'),
+                  
+                );
+                _scaffoldKey.currentState.showSnackBar(snackBar);
+              });
+            }
+          },
           color: Color.fromARGB(244, 157, 232, 174),
           elevation: 0.0,
           textColor: Colors.white,
@@ -186,6 +205,7 @@ class _MainScreenState extends State<MainScreen> {
                     Color.fromARGB(255, 243, 123, 125))));
         break;
       case NalEmptyDataState:
+        textLetters = (snapshotData as NalDataState).letters;
         return Padding(
             padding: EdgeInsets.all(8.0),
             child: Text((snapshotData as NalEmptyDataState).letters,
@@ -200,6 +220,9 @@ class _MainScreenState extends State<MainScreen> {
         if ((snapshotData as NalDataState).number.isNotEmpty &&
             numberTextController.text.isEmpty) {
           isEmptyDataState = true;
+          textLetters = (snapshotData as NalDataState).letters;
+        } else {
+          textLetters = (snapshotData as NalDataState).number;
         }
         return Padding(
             padding: EdgeInsets.all(8.0),
