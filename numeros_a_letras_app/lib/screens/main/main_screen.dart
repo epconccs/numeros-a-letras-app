@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:numeros_a_letras_app/data/number_repository.dart';
 import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
 import 'package:numeros_a_letras_app/screens/main/nal_bloc.dart';
@@ -17,9 +18,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final NalBloc nalBloc = NalBloc(NumberRepository());
   final numberTextController = TextEditingController();
+
   bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
+  double heightWidthLogoNal = 150;
+  var _focusNode = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -27,60 +31,82 @@ class _MainScreenState extends State<MainScreen> {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
     double buttonMarginBottom = heightScreen * 0.05;
-
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (visible) {
+          isTexfieldFocused = true;
+        } else {
+          FocusScope.of(_focusNode.context).unfocus();
+          isTexfieldFocused = false;
+        }
+        checkFocusTextfieldEvent();
+      },
+    );
     return Scaffold(
         backgroundColor: Color.fromARGB(244, 201, 255, 213),
         body: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            isTexfieldFocused = false;
-            
-          }, 
-          child: Container(
-          margin: EdgeInsets.only(bottom: buttonMarginBottom),
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              getAboutButton(),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ImageView('assets/img/logo-nal-nuevo.webp', 150, 150),
-                    getTextfieldAndLabel(),
-                    StreamBuilder<NalState>(
-                        initialData: NalDataState("Letras"),
-                        stream: nalBloc.number,
-                        builder: getLettersLabel()),
-                  ],
-                ),
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              FocusScope.of(_focusNode.context).unfocus();
+              isTexfieldFocused = false;
+              checkFocusTextfieldEvent();
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: buttonMarginBottom),
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  getAboutButton(),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.bounceInOut,
+                          height: heightWidthLogoNal,
+                          width: heightWidthLogoNal,
+                          child: ImageView('assets/img/logo-nal-nuevo.webp',
+                              heightWidthLogoNal, heightWidthLogoNal),
+                        ),
+                        getTextfieldAndLabel(),
+                        StreamBuilder<NalState>(
+                            initialData: NalDataState("Letras"),
+                            stream: nalBloc.number,
+                            builder: getLettersLabel()),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                      child: new Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: getRoundedButton())),
+                ],
               ),
-              Positioned(
-                  child: new Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: getRoundedButton())),
-            ],
-          ),
-        )));
+            )));
   }
 
   //Método para obtener las vistas centrales (Textfield y Label)
   getTextfieldAndLabel() {
-    var _focusNode = new FocusNode();
     _focusNode.addListener(() {
       _focusNode.hasFocus
           ? isTexfieldFocused = true
           : isTexfieldFocused = false;
+      checkFocusTextfieldEvent();
     });
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
+          controller: numberTextController,
           textInputAction: TextInputAction.done,
+          autofocus: false,
           onEditingComplete: () => isTexfieldFocused = false,
           focusNode: _focusNode,
-          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2, activatedNegativeValues:false)],
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: [
+            DecimalTextInputFormatter(
+                decimalRange: 2, activatedNegativeValues: false)
+          ],
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
@@ -109,10 +135,10 @@ class _MainScreenState extends State<MainScreen> {
         left: widthScreen * 0.7,
         bottom: heightScreen * 0.1,
         child: GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutScreen()))
-          ,
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AboutScreen())),
           child: Container(
-            height: heightScreen*0.95,
+            height: heightScreen * 0.95,
             child: ImageView('assets/img/about-circle.webp', 200, 200),
             alignment: Alignment.topRight,
           ),
@@ -170,23 +196,46 @@ class _MainScreenState extends State<MainScreen> {
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(255, 243, 123, 125))));
       case NalDataState:
+        var isEmptyDataState = false;
+        if ((snapshotData as NalDataState).number.isNotEmpty &&
+            numberTextController.text.isEmpty) {
+          isEmptyDataState = true;
+        }
         return Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text((snapshotData as NalDataState).number,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 243, 123, 125))));
+            child: isEmptyDataState
+                ? Text((snapshotData as NalDataState).letters,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 243, 123, 125)))
+                : Text((snapshotData as NalDataState).number,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 243, 123, 125))));
       default:
     }
   }
+
+  checkFocusTextfieldEvent() {
+    if (isTexfieldFocused) {
+      setState(() {
+        heightWidthLogoNal = 100;
+      });
+    } else {
+      setState(() {
+        heightWidthLogoNal = 150;
+      });
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
-    if(nalBloc != null )
-    nalBloc.dispose();
+    if (nalBloc != null) nalBloc.dispose();
   }
-
 }
