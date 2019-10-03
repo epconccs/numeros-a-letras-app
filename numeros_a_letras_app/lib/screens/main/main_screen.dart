@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
             DecimalTextInputFormatter(
                 decimalRange: 2, activatedNegativeValues: false)
           ],
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardType: TextInputType.text,
           onChanged: (String numberText) =>
               nalBloc.new_number_event_sink.add(NewNumberEvent(numberText)),
           textAlign: TextAlign.center,
@@ -205,7 +205,7 @@ class _MainScreenState extends State<MainScreen> {
                     Color.fromARGB(255, 243, 123, 125))));
         break;
       case NalEmptyDataState:
-        textLetters = (snapshotData as NalDataState).letters;
+        textLetters = (snapshotData as NalEmptyDataState).letters;
         return Padding(
             padding: EdgeInsets.all(8.0),
             child: Text((snapshotData as NalEmptyDataState).letters,
