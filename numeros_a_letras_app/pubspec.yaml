@@ -28,7 +28,6 @@ dependencies:
   keyboard_visibility: ^0.5.2
   clipboard_manager: ^0.0.4
   splashscreen: ^1.2.0
-  
 
 dev_dependencies:
   flutter_test:
