@@ -26,6 +26,7 @@ dependencies:
   url_launcher: ^4.2.0+3
   keyboard_visibility: ^0.5.2
   clipboard_manager: ^0.0.4
+  splashscreen: ^1.2.0
 
 
 dev_dependencies:
@@ -51,6 +52,7 @@ flutter:
     - assets/img/logo-github.webp
     - assets/img/about-circle.webp
     - assets/img/about-close.webp
+    - assets/img/icono-foreground-android.png
    
   #  - images/a_dot_ham.jpeg
   fonts:
