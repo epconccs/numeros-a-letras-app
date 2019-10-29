@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:numeros_a_letras_app/screens/about/about_screen.dart';
-import 'screens/main/main_screen.dart';
+import 'package:numeros_a_letras_app/screens/main/main_screen.dart';
 
 class NalApp extends StatefulWidget {
   @override

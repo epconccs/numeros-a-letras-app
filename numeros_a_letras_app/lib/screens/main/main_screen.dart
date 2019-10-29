@@ -21,6 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   final numberTextController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>(); 
 
+
   bool isTexfieldFocused = false;
   double widthScreen = 0.0;
   double heightScreen = 0.0;
@@ -34,6 +35,12 @@ class _MainScreenState extends State<MainScreen> {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
     double buttonMarginBottom = heightScreen * 0.05;
+
+     // El equivalente de "smallestWidth" en Android.
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    // Para saber si es tablet o si es smartphone se basa en el ancho de la pantalla
+    // Si es menor a 600 es un teléfono
+    final bool useMobileLayout = shortestSide < 600;  
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
@@ -68,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
                       children: <Widget>[
                         AnimatedContainer(
                           duration: Duration(milliseconds: 500),
-                          curve: Curves.bounceInOut,
                           height: heightWidthLogoNal,
                           width: heightWidthLogoNal,
                           child: ImageView('assets/img/logo-nal-nuevo.webp',
