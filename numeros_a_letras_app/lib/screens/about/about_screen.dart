@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:numeros_a_letras_app/utils/image_widget.dart';
-import 'package:numeros_a_letras_app/utils/shapes_painter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatefulWidget {

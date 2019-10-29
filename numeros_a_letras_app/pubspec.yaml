@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -26,11 +27,20 @@ dependencies:
   url_launcher: ^4.2.0+3
   keyboard_visibility: ^0.5.2
   clipboard_manager: ^0.0.4
-
+  splashscreen: ^1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true 
+  ios: true
+  image_path_ios: "assets/img/icono-ios.png"
+  image_path_android: "assets/img/icono-ios.png"
+  adaptive_icon_foreground: "assets/img/icono-foreground-android.png"
+  adaptive_icon_background: "#C9FFD5"
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -51,6 +61,9 @@ flutter:
     - assets/img/logo-github.webp
     - assets/img/about-circle.webp
     - assets/img/about-close.webp
+    - assets/img/icono-ios.png
+    - assets/img/icono-foreground-android.png
+    
    
   #  - images/a_dot_ham.jpeg
   fonts:
