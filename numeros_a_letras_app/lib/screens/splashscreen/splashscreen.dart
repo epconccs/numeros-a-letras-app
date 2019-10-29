@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:numeros_a_letras_app/screens/main/main_screen.dart';
-import 'package:numeros_a_letras_app/utils/image_widget.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 class SplashScreenNAL extends StatefulWidget {
@@ -18,9 +17,10 @@ class _SplashScreenState extends State<SplashScreenNAL>{
       seconds: 5,
       navigateAfterSeconds: new MainScreen(),
       image: new Image(image: AssetImage('assets/img/icono-foreground-android.png')),
-      backgroundColor: Color.fromARGB(244, 201, 255, 213),
+      backgroundColor: Color.fromARGB(255, 243, 123, 125),
       styleTextUnderTheLoader: new TextStyle(),
-      loaderColor: Color.fromARGB(255, 243, 123, 125),
+      photoSize: widthScreen *0.25,
+      loaderColor:Color.fromARGB(244, 201, 255, 213),
     );
   }
 }
