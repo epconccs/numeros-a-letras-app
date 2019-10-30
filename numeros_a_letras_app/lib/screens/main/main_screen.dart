@@ -176,7 +176,7 @@ class _MainScreenState extends State<MainScreen> {
                 final snackBar = SnackBar(
                   duration: Duration(seconds: 1),
                   behavior: SnackBarBehavior.floating,
-                  content: Text('Texto copiado'),
+                  content: Text('Texto copiado' ,textAlign: TextAlign.center,),
                   
                 );
                 _scaffoldKey.currentState.showSnackBar(snackBar);
@@ -210,6 +210,23 @@ class _MainScreenState extends State<MainScreen> {
                 valueColor: new AlwaysStoppedAnimation<Color>(
                     Color.fromARGB(255, 243, 123, 125))));
         break;
+      case NoInternetState:
+          var snackBar = SnackBar(
+                  duration: Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
+                  content: Text('No Tienes conexión a internet' ,textAlign: TextAlign.center,),
+                );
+                WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(snackBar));
+        return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Letras',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 243, 123, 125))));
+      
       case NalEmptyDataState:
         textLetters = (snapshotData as NalEmptyDataState).letters;
         return Padding(
