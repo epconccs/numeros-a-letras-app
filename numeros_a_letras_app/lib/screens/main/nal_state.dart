@@ -3,6 +3,7 @@ class NalState {
   factory NalState.numberData(String string) = NalDataState;
   factory NalState.numberLoading() = NalLoadingState;
   factory NalState.emptyData() = NalEmptyDataState;
+  factory NalState.noInternetConnection() = NoInternetState;
 }
 
 class NalDataState extends NalState {
@@ -14,3 +15,5 @@ class NalEmptyDataState extends NalState{
   final String letters = "Letras";
 }
 class NalLoadingState extends NalState {}
+
+class NoInternetState extends NalState{}
