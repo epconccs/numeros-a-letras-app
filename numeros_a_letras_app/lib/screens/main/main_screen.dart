@@ -146,11 +146,11 @@ class _MainScreenState extends State<MainScreen> {
 
 //Método para obtener el botón ACERCA DE
   getAboutButton() {
-    //var multiplierWidth = isLargeScreen ? 0.7:
-    //var heightScreen = isLargeScreen ? 0.1:
+    var multiplierWidth = isLargeScreen ?  0.85 : 0.7;
+    var multiplierHeight = isLargeScreen ? 0.02 : 0.1;
     return Positioned(
-        left: widthScreen * 0.85,
-        bottom: heightScreen * 0.02,
+        left: widthScreen * multiplierWidth,
+        bottom: heightScreen * multiplierHeight,
         child: GestureDetector(
           onTap: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => AboutScreen())),
