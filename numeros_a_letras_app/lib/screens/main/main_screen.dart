@@ -29,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   var _focusNode = new FocusNode();
   String textLetters = "";
 
+  bool isLargeScreen ;
   @override
   Widget build(BuildContext context) {
     // full screen width and height
@@ -40,7 +41,8 @@ class _MainScreenState extends State<MainScreen> {
     var shortestSide = MediaQuery.of(context).size.shortestSide;
     // Para saber si es tablet o si es smartphone se basa en el ancho de la pantalla
     // Si es menor a 600 es un teléfono
-    final bool useMobileLayout = shortestSide < 600;  
+    isLargeScreen = shortestSide > 600;  
+   
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
@@ -106,6 +108,7 @@ class _MainScreenState extends State<MainScreen> {
           : isTexfieldFocused = false;
       checkFocusTextfieldEvent();
     });
+    var fontSizeNumber = isLargeScreen ? 28.0 : 18.0;
     return SizedBox(
       width: widthScreen * 0.8,
       child: TextField(
@@ -124,7 +127,7 @@ class _MainScreenState extends State<MainScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 18,
+              fontSize: fontSizeNumber,
               color: Color.fromARGB(255, 71, 144, 181),
               fontWeight: FontWeight.w400),
           decoration: InputDecoration(
@@ -143,9 +146,11 @@ class _MainScreenState extends State<MainScreen> {
 
 //Método para obtener el botón ACERCA DE
   getAboutButton() {
+    var multiplierWidth = isLargeScreen ?  0.85 : 0.7;
+    var multiplierHeight = isLargeScreen ? 0.02 : 0.1;
     return Positioned(
-        left: widthScreen * 0.7,
-        bottom: heightScreen * 0.1,
+        left: widthScreen * multiplierWidth,
+        bottom: heightScreen * multiplierHeight,
         child: GestureDetector(
           onTap: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => AboutScreen())),
@@ -161,7 +166,7 @@ class _MainScreenState extends State<MainScreen> {
   getRoundedButton() {
     final buttonWidth = widthScreen * 0.7;
     final buttonHeight = heightScreen * 0.07;
-
+    var copyButtonFontSize =  isLargeScreen ? 32.0 :18.0;
     return SizedBox(
         width: buttonWidth,
         height: buttonHeight,
@@ -188,7 +193,7 @@ class _MainScreenState extends State<MainScreen> {
           textColor: Colors.white,
           child: Text("Copiar".toUpperCase(),
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: copyButtonFontSize,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500)),
         ));
@@ -202,6 +207,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getRequiredWidget(NalState snapshotData) {
+    var letterSizeNumber = isLargeScreen ? 26.0 : 13.0;
     switch (snapshotData.runtimeType) {
       case NalLoadingState:
         return Padding(
@@ -223,7 +229,7 @@ class _MainScreenState extends State<MainScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 13,
+                    fontSize: letterSizeNumber,
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(255, 243, 123, 125))));
       
@@ -235,7 +241,7 @@ class _MainScreenState extends State<MainScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 13,
+                    fontSize: letterSizeNumber,
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(255, 243, 123, 125))));
       case NalDataState:
@@ -253,14 +259,14 @@ class _MainScreenState extends State<MainScreen> {
                 ? Text((snapshotData as NalDataState).letters,
                     style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 13,
+                        fontSize: letterSizeNumber,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 243, 123, 125)))
                 : Text((snapshotData as NalDataState).number,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 13,
+                        fontSize: letterSizeNumber,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 243, 123, 125))));
       default:
@@ -270,11 +276,11 @@ class _MainScreenState extends State<MainScreen> {
   checkFocusTextfieldEvent() {
     if (isTexfieldFocused) {
       setState(() {
-        heightWidthLogoNal = 100;
+        heightWidthLogoNal = isLargeScreen ? 200 :100;
       });
     } else {
       setState(() {
-        heightWidthLogoNal = 150;
+        heightWidthLogoNal = isLargeScreen ? 250 :150;
       });
     }
   }
