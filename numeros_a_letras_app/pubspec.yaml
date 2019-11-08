@@ -37,7 +37,7 @@ dev_dependencies:
 flutter_icons:
   android: true 
   ios: true
-  image_path_ios: "assets/img/icono-ios.png"
+  image_path_ios: "assets/img/icono-ios.jpg"
   image_path_android: "assets/img/icono-ios.png"
   adaptive_icon_foreground: "assets/img/icono-foreground-android.png"
   adaptive_icon_background: "#C9FFD5"
@@ -64,6 +64,7 @@ flutter:
     - assets/img/about-close.webp
     - assets/img/icono-ios.png
     - assets/img/icono-foreground-android.png
+    - assets/img/icono-ios.jpg
     
    
   #  - images/a_dot_ham.jpeg
