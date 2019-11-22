@@ -19,9 +19,13 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app uses location for connectivity library of flutter.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses location for connectivity library of flutter.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,9 +45,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app uses location for connectivity library of flutter.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses location for connectivity library of flutter.</string>
 </dict>
 </plist>
