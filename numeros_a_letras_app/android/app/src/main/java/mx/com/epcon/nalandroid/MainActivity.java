@@ -1,4 +1,4 @@
-package mx.com.epcon.nal;
+package mx.com.epcon.nalandroid;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
