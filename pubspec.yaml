@@ -1,0 +1,39 @@
+name: numeros_a_letras_app
+description: "NAL - Números A Letras"
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  convert: ^3.1.2
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  http: ^1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_native_splash: ^2.4.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: Avenir
+      fonts:
+        - asset: assets/fonts/Avenir-Medium.ttf
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#F55D6B"
+  image: assets/images/splash-logo.png
+  android_12:
+    color: "#F55D6B"
+    image: assets/images/splash-logo.png
